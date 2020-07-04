@@ -5,6 +5,7 @@ var mode = 'mapbox.places/';
 // var type = '&types=neighborhood';
 
 
+
 function geocode() {
     $('#result').html('');
     lonlatInput = $('#lonlat').val();
@@ -17,31 +18,34 @@ function geocode() {
 
 var map = L.map('mapid').setView([40.7128, -74.0060], 13);
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=wBoJx3TjkRZbDZ0Srk4n', {
     maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
     id: 'mapbox/streets-v11',
     tileSize: 512,
-    zoomOffset: -1
+    zoomOffset: -1,  
+    closePopupOnClick: false
 }).addTo(map);
 
-var marker = L.marker([40.7128, -74.0060]).addTo(map);
 
 map.on('zoomend', function() {
+    clearPopups();
     var latlong = map.getCenter();
     var query = latlong.lng + '%2C' + latlong.lat + '.json';
     getNeighborhood(query)
+    // plotRandom(); 
 });
 
 map.on('dragend', function() {
+    clearPopups(); 
     var latlong = map.getCenter();
     var query = latlong.lng + '%2C' + latlong.lat + '.json';
     getNeighborhood(query)
+    // plotRandom(); 
 });
 
 function getNeighborhood(lonlat) {
+    clearPopups(); 
     var url = urlInit + mode + lonlat + access_token;
     $.ajax({
     type: 'GET',
@@ -69,11 +73,8 @@ function getNeighborhood(lonlat) {
             dataType: "text",
             success: function (response) {
                 console.log('woohoo something happened!')
-                console.log(JSON.parse(response).posts)
-                var popup = L.popup({closeButton: false})
-                    .setLatLng(map.getCenter())
-                    .setContent('<img alt="Qries" src="' + JSON.parse(response)[0] +'" width = "150" >')
-                    .openOn(map); 
+                plotRandom(JSON.parse(response)); 
+                return JSON.parse(response);
             },
             error: function(response) { 
                 console.log("function failed :(")
@@ -86,7 +87,6 @@ function getNeighborhood(lonlat) {
     }
     });
 }
-
 // get's the place (which should be a city?)
 function getPlaceName(context){
     var result = "";
@@ -106,8 +106,47 @@ function getPlaceName(context){
     return result;
 }
 
-// var popup = L.popup({closeButton: false})
+// var popup1 = L.popup({closeButton: false, closeOnClick: false})
 //     .setLatLng([40.7128, -74.0060])
-//     .setContent('<img alt="Qries" src="' + data[8] +'" width = "150" >')
-//     .openOn(map); 
+//     .setContent('asdfasd')
+//     .addTo(map); 
 
+
+// var popup2 = L.popup({closeButton: false,  closeOnClick: false})
+//     .setLatLng([40.7000, -74.0060])
+//     .setContent('3fadsfadsf')
+//     .addTo(map); 
+
+var arrPopups=new Array(0);
+var bounds;
+function plotRandom(imgs) { 
+    bounds = map.getBounds(); 
+    var sw = bounds.getSouthWest(); 
+    var ne = bounds.getNorthEast(); 
+    var lngSpan = ne.lng - sw.lng; 
+    var latSpan = ne.lat -  sw.lat; 
+    for(var i = 0; i < 5; ++i ) { 
+        var point = [sw.lat + latSpan * Math.random(), sw.lng + lngSpan * Math.random()];
+        var popup = placePopup(point, imgs[Math.floor(Math.random() * 10)]);  
+        popup.addTo(map); 
+        arrPopups.push(popup);
+    }
+}
+
+function placePopup(location, img) { 
+    var popup = L.popup({closeButton: false,  closeOnClick: false})
+        .setLatLng(location)
+        .setContent('<img alt="img not found" src="' + img +'" width = "150" >'); 
+    return popup
+}
+
+function clearPopups(){ 
+    if(arrPopups) { 
+        for (i in arrPopups) { 
+            arrPopups[i].removeFrom(map); 
+        }
+    }
+    arrPopups = new Array(0);
+}
+
+plotRandom(); 
