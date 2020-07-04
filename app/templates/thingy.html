@@ -11,12 +11,17 @@
     crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
-
+    crossorigin=""></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
     <div id="mapid"></div>
     <script src="static/map.js"></script>
+    
+    <script src="static/latlong.js"></script>
+    <input type="text" value="-73.945462,40.830182" id="lonlat" />
+    <button id="go" onclick="geocode();">Geocode</button>
+    <div id="result"></div>
 </body>
 </html>
