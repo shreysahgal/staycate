@@ -27,10 +27,11 @@ class MyClient(Client):
 web_api = MyClient(auto_patch=True, drop_incompat_keys=False)
 
 def query_images(location_tag):
-  tag_feed = web_api.tag_feed(location_tag, count=10)
+  print(location_tag);
+  tag_feed = web_api.tag_feed(location_tag, count=1)
   imgs = []
   for post in tag_feed['data']['hashtag']['edge_hashtag_to_top_posts']['edges']:
-    imgs.append(post['node']['display_url'])
+    imgs.append(post['node']['thumbnail_resources'][0]['src'])
   return imgs
 
 
@@ -42,7 +43,6 @@ def index(city=""):
     if city == "":
         return render_template("thingy.html")
     else: 
-        print("data " + city)
         imgs = query_images(city)
         return json.dumps(imgs)
 

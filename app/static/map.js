@@ -22,11 +22,9 @@ lastCenter = map.latLngToLayerPoint(map.getCenter());
 
 
 map.on('zoomend', function() {
-    clearPopups();
-    var latlong = map.getCenter();
-    var query = latlong.lng + '%2C' + latlong.lat + '.json';
-    getNeighborhood(query)
-    // plotRandom(); 
+    // clearPopups();
+    instagramPhotos(); 
+
 });
 
 map.on('dragend', function() {
@@ -37,12 +35,28 @@ map.on('dragend', function() {
 
     if (dist >= 600) {
         console.log('changing');
-        clearPopups();
-        var query = latlong.lng + '%2C' + latlong.lat + '.json';
-        getNeighborhood(query);
+        // clearPopups();
+        instagramPhotos(); 
         lastCenter = curCenter;
     }
+    
 });
+
+function instagramPhotos(){ 
+
+    var points = findFiveRandomPoints(); 
+    var neighborhoods = new Array(0); 
+    for(i in points) {
+        var query  = points[i][1] + '%2C' + points[i][0] + '.json';
+        // neighborhoods.push(getNeighborhood(query)); 
+        console.log("querying" + getNeighborhood(query)); 
+        queryImages(getNeighborhood(query), points[i]);
+    }
+ 
+       
+   
+    
+}
 
 function getPOIs() {
     
@@ -61,17 +75,34 @@ function getPOIs() {
       });
 }
 
+function queryImages(hashtag, point) { 
+    $.ajax({
+        url: "/index/" + hashtag,
+        type: 'POST',
+        dataType: "text",
+        success: function (response) {
+            // console.log('woohoo something happened!')
+            var imgs = JSON.parse(response); 
+            placePopup(point, imgs); 
+        },
+        error: function(response) { 
+            console.log("function failed :(")
+        }
+    });
+}
 
 function getNeighborhood(lonlat) {
-    clearPopups(); 
     var url = urlInit + mode + lonlat + access_token;
+    var place = "";
     $.ajax({
     type: 'GET',
+    async: false, 
     url: url,
     success: function(rgeo) {        
         var result = rgeo;
         if (result.features.length == 0){
             // console.log("no location (probably in the middle of the ocean)");
+            place = "earth";
         } else {
             // console.log("city: " + getPlaceName(result.features[0].context))
             var neighborhood = rgeo.features[0].text;
@@ -88,26 +119,16 @@ function getNeighborhood(lonlat) {
                 hashtag = getHashtag(result.features[0].context);
             }
             console.log("Hashtag: " + hashtag);
+            place = hashtag; 
         }
-        $.ajax({
-            url: "/index/" + hashtag,
-            type: 'POST',
-            dataType: "text",
-            success: function (response) {
-                // console.log('woohoo something happened!')
-                plotRandom(JSON.parse(response)); 
-                return JSON.parse(response);
-            },
-            error: function(response) { 
-                console.log("function failed :(")
-            }
-        });
+       
     },
     error: function(rgeo) {
         console.log("fail");
         console.log(rgeo);
     }
     });
+    return place; 
 }
 
 // upgrade of the getPlaceName below
@@ -154,7 +175,7 @@ function getHashtag(context){
         success: function (response) {
             if (response.localeCompare("NotMajor") == 0){                    
                 // not major
-                console.log(city + " is not a major city");
+                // console.log(city + " is not a major city");
                 result = country;
             } else {
                     // major
@@ -165,20 +186,21 @@ function getHashtag(context){
                         result = neighborhood;
                     } else if (locality.localeCompare("") != 0){
                         // there is a neighborhood; use that
-                        console.log("Locality: " + locality);
+                        // console.log("Locality: " + locality);
                         result = locality;
                     }  else {                        
                         result = response;
-                        console.log("result after city: " + result);
+                        // console.log("result after city: " + result);
                     }
             }
         },
         error: function(response) { 
-            console.log("major city function failed :(")
+            // console.log("major city function failed :(")
         }
     });
     
     console.log("final result: " + result);
+    result = result.replace(' ', '');
     return result;
 }
 
@@ -195,25 +217,35 @@ function getHashtag(context){
 
 var arrPopups=new Array(0);
 var bounds;
-function plotRandom(imgs) { 
+function findFiveRandomPoints() { 
     bounds = map.getBounds(); 
     var sw = bounds.getSouthWest(); 
     var ne = bounds.getNorthEast(); 
     var lngSpan = ne.lng - sw.lng; 
-    var latSpan = ne.lat -  sw.lat; 
-    for(var i = 0; i < 10; ++i ) { 
+    var latSpan = ne.lat -  sw.lat;
+    var points  = new Array(0);  
+    for(var i = 0; i < 1; ++i ) { 
         var point = [sw.lat + latSpan * Math.random(), sw.lng + lngSpan * Math.random()];
-        var popup = placePopup(point, imgs[Math.floor(Math.random() * 10)]);  
-        popup.addTo(map); 
-        arrPopups.push(popup);
+        points.push(point);
+ 
     }
+    return points; 
 }
 
+
+// var popup = placePopup(point, imgs[Math.floor(Math.random() * 10)]);  
+
 function placePopup(location, img) { 
+    var z = map.getZoom();
+
+    $('.popup-image').css("width" , z * 10);
+
     var popup = L.popup({closeButton: false,  closeOnClick: false})
         .setLatLng(location)
-        .setContent('<img alt="img not found" src="' + img +'" width = "150" >'); 
-    return popup
+        .setContent('<img class = "popup-image" alt="img not found" src="' + img[Math.floor(Math.random() * img.length)] +'" width = "150" >'); 
+    arrPopups.push(popup);
+    popup.addTo(map); 
+    
 }
 
 function clearPopups(){ 
@@ -225,4 +257,4 @@ function clearPopups(){
     arrPopups = new Array(0);
 }
 
-plotRandom(); 
+
