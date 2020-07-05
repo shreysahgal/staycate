@@ -48,6 +48,8 @@ def index(city=""):
         imgs = query_images(city)
         return json.dumps(imgs)
 
+
+
 # used to check if city is a major city
 # checks city and region since either may be city name
 @app.route('/majorcity/<names>', methods = ["GET","POST"])

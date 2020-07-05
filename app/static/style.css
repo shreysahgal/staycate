@@ -36,13 +36,24 @@
 
 }
 
+.leaflet-popup {
+  box-shadow:none; 
+}
+
 .leaflet-popup-content-wrapper {
   width: 188px;
+  box-shadow:none; 
 }
 
 .leaflet-popup-content-wrapper .leaflet-popup-content {
+  box-shadow:none; 
 }
 
 .leaflet-popup-tip-container {
+  box-shadow:none; 
 }
 
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  box-shadow:none;
+}

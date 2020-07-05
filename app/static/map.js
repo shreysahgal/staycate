@@ -252,7 +252,7 @@ function placePopup(location, img) {
     var caption = img[imgindex][1].substring(0, 100) + "..."; 
     var popup = L.popup({closeButton: false,  closeOnClick: false})
         .setLatLng(location)
-        .setContent('<img class = "popup-image" alt="img not found" src="' + img[imgindex][0] +'" width = "150" > <p>'+caption+'</p>'); 
+        .setContent('<img class = "popup-image" alt="img not found" src="' + img[imgindex][0] +'" width = "150" > <p class="text-left">'+caption+'</p>'); 
     arrPopups.push(popup);
     popup.addTo(map); 
  
@@ -297,3 +297,4 @@ function displayPosts(lat, lng) {
         }
     });
 }
+
