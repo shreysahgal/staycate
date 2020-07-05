@@ -237,14 +237,16 @@ function findFiveRandomPoints() {
 
 function placePopup(location, img) { 
     var z = map.getZoom();
-
-    $('.popup-image').css("width" , z * 10);
-
+    
+    var imgindex = Math.floor(Math.random() * img.length); 
+    var caption = img[imgindex][1].substring(0, 100) + "..."; 
     var popup = L.popup({closeButton: false,  closeOnClick: false})
         .setLatLng(location)
-        .setContent('<img class = "popup-image" alt="img not found" src="' + img[Math.floor(Math.random() * img.length)] +'" width = "150" >'); 
+        .setContent('<img class = "popup-image" alt="img not found" src="' + img[imgindex][0] +'" width = "150" > <p>'+caption+'</p>'); 
     arrPopups.push(popup);
     popup.addTo(map); 
+ 
+
     
 }
 

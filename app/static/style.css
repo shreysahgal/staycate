@@ -11,5 +11,15 @@
   }
 
 .popup-image { 
-    width:100px; 
+
+}
+
+.leaflet-popup-content-wrapper {
+  
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+}
+
+.leaflet-popup-tip-container {
 }

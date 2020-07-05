@@ -31,7 +31,7 @@ def query_images(location_tag):
   tag_feed = web_api.tag_feed(location_tag, count=1)
   imgs = []
   for post in tag_feed['data']['hashtag']['edge_hashtag_to_top_posts']['edges']:
-    imgs.append(post['node']['thumbnail_resources'][0]['src'])
+    imgs.append([post['node']['thumbnail_resources'][0]['src'], post['node']['edge_media_to_caption']['edges'][0]['node']['text']])
   return imgs
 
 
