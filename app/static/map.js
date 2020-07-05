@@ -2,6 +2,7 @@ var access_token = '?access_token=sk.eyJ1Ijoid2hhbGVzMTQxMCIsImEiOiJja2M3MDVrajE
 var secret = 'sk.eyJ1Ijoid2hhbGVzMTQxMCIsImEiOiJja2M3MDVrajEweDJiMnlvYmE4ZGE4YWRvIn0.ioSoRYYB3IsNF8ZIzT-d7A';
 var urlInit = 'https://api.mapbox.com/geocoding/v5/';
 var mode = 'mapbox.places/';
+var lastCenter;
 
 var map = L.map('mapid').setView([40.7128, -74.0060], 13);
 
@@ -15,6 +16,11 @@ L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=wBoJx3TjkR
 }).addTo(map);
 
 
+lastCenter = map.latLngToLayerPoint(map.getCenter());
+// var query = lastCenter.lng + '%2C' + lastCenter.lat + '.json';
+// getNeighborhood(query);
+
+
 map.on('zoomend', function() {
     clearPopups();
     var latlong = map.getCenter();
@@ -24,11 +30,18 @@ map.on('zoomend', function() {
 });
 
 map.on('dragend', function() {
-    clearPopups(); 
+
     var latlong = map.getCenter();
-    var query = latlong.lng + '%2C' + latlong.lat + '.json';
-    getNeighborhood(query)
-    // plotRandom(); 
+    curCenter = map.latLngToLayerPoint(latlong);
+    dist = curCenter.distanceTo(lastCenter);
+
+    if (dist >= 600) {
+        console.log('changing');
+        clearPopups();
+        var query = latlong.lng + '%2C' + latlong.lat + '.json';
+        getNeighborhood(query);
+        lastCenter = curCenter;
+    }
 });
 
 function getPOIs() {
@@ -58,7 +71,7 @@ function getNeighborhood(lonlat) {
     success: function(rgeo) {        
         var result = rgeo;
         if (result.features.length == 0){
-            console.log("no location (probably in the middle of the ocean)");
+            // console.log("no location (probably in the middle of the ocean)");
         } else {
             // console.log("city: " + getPlaceName(result.features[0].context))
             var neighborhood = rgeo.features[0].text;
@@ -81,7 +94,7 @@ function getNeighborhood(lonlat) {
             type: 'POST',
             dataType: "text",
             success: function (response) {
-                console.log('woohoo something happened!')
+                // console.log('woohoo something happened!')
                 plotRandom(JSON.parse(response)); 
                 return JSON.parse(response);
             },
@@ -188,7 +201,7 @@ function plotRandom(imgs) {
     var ne = bounds.getNorthEast(); 
     var lngSpan = ne.lng - sw.lng; 
     var latSpan = ne.lat -  sw.lat; 
-    for(var i = 0; i < 5; ++i ) { 
+    for(var i = 0; i < 10; ++i ) { 
         var point = [sw.lat + latSpan * Math.random(), sw.lng + lngSpan * Math.random()];
         var popup = placePopup(point, imgs[Math.floor(Math.random() * 10)]);  
         popup.addTo(map); 
