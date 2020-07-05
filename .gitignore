@@ -1,0 +1,6 @@
+__pycache__/
+venv/
+instagram_private_api/
+instagram_web_api/
+node_modules/
+allCountries.tsv
