@@ -37,7 +37,7 @@
 }
 
 .leaflet-popup-content-wrapper {
-  
+  width: 188px;
 }
 
 .leaflet-popup-content-wrapper .leaflet-popup-content {
