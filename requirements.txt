@@ -1,0 +1,19 @@
+
+Bootstrap-Flask==1.4
+DateTime==4.3
+decorator==4.4.2
+entrypoints==0.3
+flake8==3.8.3
+Flask==1.1.2
+gunicorn==20.0.4
+instagram-private-api @ git+https://github.com/ping/instagram_private_api.git@1d70e99bc11591161b0cd71cff3f0c08cd04b34f
+itsdangerous==1.1.0
+Jinja2==2.11.2
+json5==0.9.5
+jsonschema==3.2.0
+MarkupSafe==1.1.1
+python-dateutil==2.8.1
+python-utils==2.4.0
+requests==2.24.0
+tweepy==3.8.0
+Werkzeug==1.0.1
