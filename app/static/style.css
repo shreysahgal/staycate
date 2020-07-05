@@ -1,4 +1,6 @@
 #mapid { 
+   left:0px; 
+   top:0px; 
     position: absolute;
     height: 100%;
     width: 100%; 
@@ -10,7 +12,27 @@
     color: blue;
   }
 
-.popup-image {
+#logo { 
+  position: absolute;
+  top: 20px;
+  margin: auto;
+  width:30%; 
+}
+
+.sidenav {
+  text-align:center;
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 15%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right:0;
+  background-color: #999999; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+
+}
+.popup-image { 
 
 }
 
@@ -23,3 +45,4 @@
 
 .leaflet-popup-tip-container {
 }
+

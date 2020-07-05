@@ -15,6 +15,7 @@ L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=wBoJx3TjkR
     closePopupOnClick: false
 }).addTo(map);
 
+
 new L.Control.GPlaceAutocomplete({
     callback: function(place){
         var loc = place.geometry.location;

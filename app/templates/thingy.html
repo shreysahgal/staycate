@@ -18,15 +18,40 @@
 
     <script src="/static/leaflet-gplaces-autocomplete.js"></script>
     <link rel="stylesheet" href="/static/leaflet-gplaces-autocomplete.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+          
 </head>
 
 <body>
+    
+    <!-- <div class = "sidenav">
+        <img style = "width: 90%; padding:0.5em;" src="static/staycation.png" alt="">
+        <a href="about.html" style = "display:block">About</a>
+        <a href="javascript:clearPopups()" style = "display:block">Start a new trip</a>
+
+        </div> -->
     <div id="mapid"></div>
     <script src="static/map.js"></script>
-    
+  
 
-    <input type="text" value="-73.945462,40.830182" id="lonlat" />
-    <button id="go" onclick="geocode();">Geocode</button>
-    <div id="result"></div>
+      <div class="leaflet-top card border border-secondary" style="width: 18rem;position:absolute; top:10px; right:10px;">
+        <img class="card-img-top" style= "padding:10px;" src="static/staycation.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

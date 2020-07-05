@@ -3,7 +3,7 @@
 
     L.Control.GPlaceAutocomplete = L.Control.extend({
         options: {
-            position: "topright",
+            position: "topleft",
             prepend: true,
             collapsed_mode: false,
             placeholder: null,
@@ -29,7 +29,7 @@
         _buildContainer: function () {
 
             // build structure
-            this.container = L.DomUtil.create("div", "leaflet-gac-container leaflet-bar");
+            this.container = L.DomUtil.create("div", "myControl leaflet-gac-container leaflet-bar");
             var searchWrapper = L.DomUtil.create("div", "leaflet-gac-wrapper");
             this.searchBox = L.DomUtil.create("input", "leaflet-gac-control");
             this.autocomplete = new google.maps.places.Autocomplete(this.searchBox, this.options.autocomplete_options);
