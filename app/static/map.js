@@ -19,7 +19,9 @@ new L.Control.GPlaceAutocomplete({
     callback: function(place){
         var loc = place.geometry.location;
         map.panTo([loc.lat(), loc.lng()]);
-        map.setZoom(18);
+        map.setZoom(9);
+        displayPosts(loc.lat(), loc.lng());
+        map.setZoom(14);
     }
 }).addTo(map);
 
@@ -30,7 +32,6 @@ lastCenter = map.latLngToLayerPoint(map.getCenter());
 
 
 map.on('zoomend', function() {
-    // clearPopups();
     instagramPhotos(); 
 
 });
@@ -41,7 +42,7 @@ map.on('dragend', function() {
     curCenter = map.latLngToLayerPoint(latlong);
     dist = curCenter.distanceTo(lastCenter);
 
-    if (dist >= 600) {
+    if (dist >= 500) {
         console.log('changing');
         // clearPopups();
         instagramPhotos(); 
@@ -267,4 +268,31 @@ function clearPopups(){
     arrPopups = new Array(0);
 }
 
+function displayPosts(lat, lng) {
+    base = '/nearbyplaces?';
+    loc = lat+','+lng;
+    console.log(lat);
+    console.log(lng);
+    type = 'tourist_attraction';
+    radius = 16000
+    var url = base + "location=" + loc + "&radius=" + radius + "&type=" + type;
+    console.log(url);
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response) {
+            var lat, lng, name;
+            response.results.forEach(function(place) {
+                lat = place.geometry.location.lat;
+                lng = place.geometry.location.lng;
+                name = place.name.replace(' ', '');
 
+                queryImages(name.replace(' ', ''), [lat, lng]);
+                console.log('success??');
+            })
+        },
+        error: function(response) {
+            console.log("Google call error");
+        }
+    });
+}
