@@ -43,7 +43,7 @@ def query_images(location_tag):
 @app.route('/index/<city>', methods = ["GET", "POST"])
 def index(city=""):
     if city == "":
-        return render_template("thingy.html")
+        return render_template("map.html")
     else: 
         imgs = query_images(city)
         return json.dumps(imgs)
@@ -79,8 +79,3 @@ def nearby():
         '&key=' + GOOGLE_API_KEY + \
         '&language=en'
   return requests.get(url).json()
-
-
-@app.route('/test')
-def test():
-  return render_template('test.html')
