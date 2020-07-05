@@ -20,6 +20,7 @@ new L.Control.GPlaceAutocomplete({
         var loc = place.geometry.location;
         map.panTo([loc.lat(), loc.lng()]);
         map.setZoom(18);
+        displayPosts(loc.lat(), loc.lng());
     }
 }).addTo(map);
 
@@ -231,6 +232,30 @@ function clearPopups(){
         }
     }
     arrPopups = new Array(0);
+}
+
+function displayPosts(lat, lng) {
+    base = '/nearbyplaces?';
+    loc = lat+','+lng;
+    type = 'tourist_attraction';
+    radius = 16000
+    var url = base + "location=" + loc + "&radius=" + radius + "&type=" + type;
+    console.log(url);
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response) {
+            var lat, lng, name;
+            response.results.forEach(function(place) {
+                lat = place.geometry.location.lat;
+                lng = place.geometry.location.lng;
+                name = place.name.replace(' ', '');
+            })
+        },
+        error: function(response) {
+            console.log("Google call error");
+        }
+    });
 }
 
 plotRandom(); 

@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template
+from flask import render_template, request
 from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
 
 import hashlib
@@ -7,8 +7,10 @@ import string
 import random
 import json
 import sys
+import requests
 
 major_cities = []
+GOOGLE_API_KEY = 'AIzaSyCp_HUtO07Z1y5bCAIuk-7F6zfaJ0jHFKs'
 
 def getMajorCities():
   global major_cities
@@ -32,7 +34,6 @@ def query_images(location_tag):
   for post in tag_feed['data']['hashtag']['edge_hashtag_to_top_posts']['edges']:
     imgs.append(post['node']['display_url'])
   return imgs
-
 
 
 @app.route('/')
@@ -62,3 +63,22 @@ def majorcity(names):
   else:
     return "NotMajor"
 
+# example:
+# /nearbyplaces?location=40.803199,-73.945298&radius=1500&type=restaurant
+@app.route('/nearbyplaces')
+def nearby():
+  base = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+  location = request.args.get('location')
+  radius = request.args.get('radius')
+  querytype = request.args.get('type')
+  url = base + \
+        'location=' + location + \
+        '&radius=' + radius + \
+        '&type=' + querytype + \
+        '&key=' + GOOGLE_API_KEY
+  return requests.get(url).json()
+
+
+@app.route('/test')
+def test():
+  return render_template('test.html')
