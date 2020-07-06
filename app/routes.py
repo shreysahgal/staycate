@@ -10,7 +10,7 @@ import sys
 import requests
 
 major_cities = []
-GOOGLE_API_KEY = 'AIzaSyCp_HUtO07Z1y5bCAIuk-7F6zfaJ0jHFKs'
+GOOGLE_API_KEY = <apikey>
 
 def getMajorCities():
   global major_cities
